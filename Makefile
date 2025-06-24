@@ -16,12 +16,12 @@ fetch:
 	@echo "Fetching schema from PRH..."
 	wget $(SCHEMA_URL) -O $(SCHEMA_FILE)
 
-generate:
+generate: 
 	@echo "Generating Go client from schema..."
 	openapi-generator generate \
 		-i $(SCHEMA_FILE) \
 		-g go \
-		-o $(OUTPUT_DIR) \
+		-o ./v3 \
 		--additional-properties=packageName=ytjclient,projectName=ytj-go-client,moduleName=github.com/tomidotomicode/goytj/v3
 
 clean:
