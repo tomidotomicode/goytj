@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -41,5 +40,4 @@ model_post_office_entry.go
 model_register_name.go
 model_registered_entry.go
 response.go
-test/api_default_test.go
 utils.go

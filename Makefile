@@ -22,7 +22,7 @@ generate:
 		-i $(SCHEMA_FILE) \
 		-g go \
 		-o $(OUTPUT_DIR) \
-		--additional-properties=packageName=ytjclient,projectName=ytj-go-client
+		--additional-properties=packageName=ytjclient,projectName=ytj-go-client,moduleName=github.com/tomidotomicode/goytj/v3
 
 clean:
 	@echo "Cleaning generated files..."
