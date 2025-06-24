@@ -1,0 +1,1385 @@
+openapi: 3.0.1
+info:
+  license:
+    name: Creative Commons Nimeä 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+  title: Opendata YTJ-Api
+  version: "2.0"
+externalDocs:
+  description: Lisätiedot Swagger-ohjelmistosta
+  url: http://swagger.io
+servers:
+- url: https://avoindata.prh.fi/opendata-ytj-api/v3
+paths:
+  /companies:
+    get:
+      operationId: GetCompanies
+      parameters:
+      - description: "Toiminimi (haku tehdään nykyiseen ja edelliseen toiminimeen,\
+          \ rinnakkaistoiminimeen ja aputoiminimeen)"
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Postitoimipaikka
+        explode: true
+        in: query
+        name: location
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Y-tunnus
+        explode: true
+        in: query
+        name: businessId
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          <a aria-label="Avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=YRMU&lang=fi">Yritysmuoto <svg width="15" height="20" viewBox="0 -11 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+        explode: true
+        in: query
+        name: companyForm
+        required: false
+        schema:
+          enum:
+          - AOY
+          - ASH
+          - ASY
+          - AY
+          - AYH
+          - ETS
+          - ETY
+          - SCE
+          - SCP
+          - HY
+          - KOY
+          - KVJ
+          - KVY
+          - KY
+          - OK
+          - OP
+          - OY
+          - OYJ
+          - SE
+          - SL
+          - SP
+          - SÄÄ
+          - TYH
+          - VOJ
+          - VOY
+          - VY
+          - VALTLL
+          type: string
+        style: form
+      - description: |
+          <a aria-label="Avautuu uudessa ikkunassa" rel="noopener" href="https://www.stat.fi/fi/luokitukset/toimiala/">Päätoimiala <svg width="15" height="20" viewBox="0 -6 24 24"> <path margin="0" fill="#035ca7" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg></a>(Hae joko Tilastokeskuksen toimialakoodilla tai tekstillä)
+        explode: true
+        in: query
+        name: mainBusinessLine
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Yrityksen rekisteröintipäivä aikavälinä (kirjoita tähän alkamispäivä
+          muodossa vvvv-kk-pp)
+        explode: true
+        in: query
+        name: registrationDateStart
+        required: false
+        schema:
+          format: date
+          maxLength: 10
+          minLength: 10
+          type: string
+        style: form
+      - description: Yrityksen rekisteröintipäivä aikavälinä (kirjoita tähän päättymispäivä
+          muodossa vvvv-kk-pp)
+        explode: true
+        in: query
+        name: registrationDateEnd
+        required: false
+        schema:
+          format: date
+          maxLength: 10
+          minLength: 10
+          type: string
+        style: form
+      - description: Käynti- tai postiosoitteen postinumero
+        explode: true
+        in: query
+        name: postCode
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Y-tunnuksen antamispäivä aikavälinä (Kirjoita tähän alkamispäivä
+          muodossa vvvv-kk-pp)
+        explode: true
+        in: query
+        name: businessIdRegistrationStart
+        required: false
+        schema:
+          format: date
+          maxLength: 10
+          minLength: 10
+          type: string
+        style: form
+      - description: Y-tunnuksen antamispäivä aikavälinä (kirjoita tähän päättymispäivä
+          muodossa vvvv-kk-pp)
+        explode: true
+        in: query
+        name: businessIdRegistrationEnd
+        required: false
+        schema:
+          format: date
+          maxLength: 10
+          minLength: 10
+          type: string
+        style: form
+      - description: "Jos haku palauttaa yli 100 tulosta, tulokset palautetaan sivutettuina.\
+          \ Page -parametrilla voit kertoa haluamasi tulossivun. Jos page -parametria\
+          \ ei ole annettu tai se osoittaa sivulle, jota tuloksista ei löydy, palautetaan\
+          \ ensimmäisen sivun tulokset (esimerkiksi jos haet sivua 5 ja tuloksissa\
+          \ on vain 3 sivua)."
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Virheellinen pyyntö
+        "429":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Liian monta pyyntöä
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Sisäinen palvelinvirhe
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Palvelin ei voi käsitellä pyyntöä
+      summary: "Hae yrityksiä toiminimen, postitoimipaikan Y-tunnuksen tai yritysmuodon\
+        \ perusteella"
+  /all_companies:
+    get:
+      operationId: GetAllCompanies
+      responses:
+        "200":
+          content:
+            application/zip:
+              schema:
+                format: binary
+                type: string
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Virheellinen pyyntö
+        "429":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Liian monta pyyntöä
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Sisäinen palvelinvirhe
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Palvelin ei voi käsitellä pyyntöä
+      summary: Hae kaikki kaupparekisterissä olevat ja vireillä olevat yritykset JSON
+        tiedostona (päivitetään kerran päivässä)
+  /description:
+    get:
+      operationId: GetDescription
+      parameters:
+      - description: Koodi
+        explode: true
+        in: query
+        name: code
+        required: true
+        schema:
+          enum:
+          - YRMU
+          - REK_KDI
+          - TLAJI
+          - SELTILA
+          - REK
+          - VIRANOM
+          - TLAHDE
+          - KIELI
+          - TOIMI
+          - TOIMI2
+          - TOIMI3
+          - KONK
+          - SANE
+          - STATUS3
+          - "SELTILA,SANE,KONK"
+          type: string
+        style: form
+      - description: Kielitunnus
+        explode: true
+        in: query
+        name: lang
+        required: true
+        schema:
+          enum:
+          - en
+          - fi
+          - sv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Virheellinen pyyntö
+        "429":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Liian monta pyyntöä
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Sisäinen palvelinvirhe
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Palvelin ei voi käsitellä pyyntöä
+      summary: Hae koodiston tiedot
+  /post_codes:
+    get:
+      operationId: GetPostCodes
+      parameters:
+      - description: Kielitunnus
+        explode: true
+        in: query
+        name: lang
+        required: true
+        schema:
+          enum:
+          - en
+          - fi
+          - sv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PostOfficeEntry'
+                type: array
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Virheellinen pyyntö
+        "429":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Liian monta pyyntöä
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Sisäinen palvelinvirhe
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Palvelin ei voi käsitellä pyyntöä
+      summary: Hae postikoodiston tiedot
+components:
+  schemas:
+    CompanyResult:
+      description: Yrityksen tai yhteisön tulokset
+      example:
+        totalResults: 0
+        companies:
+        - website:
+            registrationDate: 2000-01-23
+            source: source
+            url: url
+          addresses:
+          - country: country
+            postOffices:
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            source: source
+            type: 5
+            co: co
+            postOfficeBox: postOfficeBox
+            apartmentIdSuffix: apartmentIdSuffix
+            street: street
+            registrationDate: 2000-01-23
+            buildingNumber: buildingNumber
+            postCode: postCode
+            freeAddressLine: freeAddressLine
+            entrance: entrance
+            apartmentNumber: apartmentNumber
+          - country: country
+            postOffices:
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            source: source
+            type: 5
+            co: co
+            postOfficeBox: postOfficeBox
+            apartmentIdSuffix: apartmentIdSuffix
+            street: street
+            registrationDate: 2000-01-23
+            buildingNumber: buildingNumber
+            postCode: postCode
+            freeAddressLine: freeAddressLine
+            entrance: entrance
+            apartmentNumber: apartmentNumber
+          euId:
+            source: source
+            value: value
+          registeredEntries:
+          - endDate: 2000-01-23
+            authority: authority
+            registrationDate: 2000-01-23
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            register: register
+          - endDate: 2000-01-23
+            authority: authority
+            registrationDate: 2000-01-23
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            register: register
+          endDate: 2000-01-23
+          companySituations:
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: SANE
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: SANE
+          businessId:
+            registrationDate: 2000-01-23
+            source: source
+            value: value
+          companyForms:
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            version: 1
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            version: 1
+          names:
+          - endDate: 2000-01-23
+            name: name
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            version: 6
+          - endDate: 2000-01-23
+            name: name
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            version: 6
+          registrationDate: 2000-01-23
+          lastModified: 2000-01-23T04:56:07.000+00:00
+          mainBusinessLine:
+            typeCodeSet: typeCodeSet
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+          tradeRegisterStatus: tradeRegisterStatus
+          status: status
+        - website:
+            registrationDate: 2000-01-23
+            source: source
+            url: url
+          addresses:
+          - country: country
+            postOffices:
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            source: source
+            type: 5
+            co: co
+            postOfficeBox: postOfficeBox
+            apartmentIdSuffix: apartmentIdSuffix
+            street: street
+            registrationDate: 2000-01-23
+            buildingNumber: buildingNumber
+            postCode: postCode
+            freeAddressLine: freeAddressLine
+            entrance: entrance
+            apartmentNumber: apartmentNumber
+          - country: country
+            postOffices:
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            - city: city
+              languageCode: languageCode
+              municipalityCode: municipalityCode
+            source: source
+            type: 5
+            co: co
+            postOfficeBox: postOfficeBox
+            apartmentIdSuffix: apartmentIdSuffix
+            street: street
+            registrationDate: 2000-01-23
+            buildingNumber: buildingNumber
+            postCode: postCode
+            freeAddressLine: freeAddressLine
+            entrance: entrance
+            apartmentNumber: apartmentNumber
+          euId:
+            source: source
+            value: value
+          registeredEntries:
+          - endDate: 2000-01-23
+            authority: authority
+            registrationDate: 2000-01-23
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            register: register
+          - endDate: 2000-01-23
+            authority: authority
+            registrationDate: 2000-01-23
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            register: register
+          endDate: 2000-01-23
+          companySituations:
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: SANE
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: SANE
+          businessId:
+            registrationDate: 2000-01-23
+            source: source
+            value: value
+          companyForms:
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            version: 1
+          - endDate: 2000-01-23
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+            version: 1
+          names:
+          - endDate: 2000-01-23
+            name: name
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            version: 6
+          - endDate: 2000-01-23
+            name: name
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            version: 6
+          registrationDate: 2000-01-23
+          lastModified: 2000-01-23T04:56:07.000+00:00
+          mainBusinessLine:
+            typeCodeSet: typeCodeSet
+            registrationDate: 2000-01-23
+            source: source
+            type: type
+            descriptions:
+            - description: description
+              languageCode: languageCode
+            - description: description
+              languageCode: languageCode
+          tradeRegisterStatus: tradeRegisterStatus
+          status: status
+      properties:
+        totalResults:
+          description: Kokonaistulosten määrä
+          format: int64
+          type: integer
+        companies:
+          description: Yrityksen tai yhteisön tiedot
+          items:
+            $ref: '#/components/schemas/Company'
+          type: array
+      required:
+      - companies
+      - totalResults
+      type: object
+    Company:
+      description: Yrityksen tai yhteisön tiedot
+      example:
+        website:
+          registrationDate: 2000-01-23
+          source: source
+          url: url
+        addresses:
+        - country: country
+          postOffices:
+          - city: city
+            languageCode: languageCode
+            municipalityCode: municipalityCode
+          - city: city
+            languageCode: languageCode
+            municipalityCode: municipalityCode
+          source: source
+          type: 5
+          co: co
+          postOfficeBox: postOfficeBox
+          apartmentIdSuffix: apartmentIdSuffix
+          street: street
+          registrationDate: 2000-01-23
+          buildingNumber: buildingNumber
+          postCode: postCode
+          freeAddressLine: freeAddressLine
+          entrance: entrance
+          apartmentNumber: apartmentNumber
+        - country: country
+          postOffices:
+          - city: city
+            languageCode: languageCode
+            municipalityCode: municipalityCode
+          - city: city
+            languageCode: languageCode
+            municipalityCode: municipalityCode
+          source: source
+          type: 5
+          co: co
+          postOfficeBox: postOfficeBox
+          apartmentIdSuffix: apartmentIdSuffix
+          street: street
+          registrationDate: 2000-01-23
+          buildingNumber: buildingNumber
+          postCode: postCode
+          freeAddressLine: freeAddressLine
+          entrance: entrance
+          apartmentNumber: apartmentNumber
+        euId:
+          source: source
+          value: value
+        registeredEntries:
+        - endDate: 2000-01-23
+          authority: authority
+          registrationDate: 2000-01-23
+          type: type
+          descriptions:
+          - description: description
+            languageCode: languageCode
+          - description: description
+            languageCode: languageCode
+          register: register
+        - endDate: 2000-01-23
+          authority: authority
+          registrationDate: 2000-01-23
+          type: type
+          descriptions:
+          - description: description
+            languageCode: languageCode
+          - description: description
+            languageCode: languageCode
+          register: register
+        endDate: 2000-01-23
+        companySituations:
+        - endDate: 2000-01-23
+          registrationDate: 2000-01-23
+          source: source
+          type: SANE
+        - endDate: 2000-01-23
+          registrationDate: 2000-01-23
+          source: source
+          type: SANE
+        businessId:
+          registrationDate: 2000-01-23
+          source: source
+          value: value
+        companyForms:
+        - endDate: 2000-01-23
+          registrationDate: 2000-01-23
+          source: source
+          type: type
+          descriptions:
+          - description: description
+            languageCode: languageCode
+          - description: description
+            languageCode: languageCode
+          version: 1
+        - endDate: 2000-01-23
+          registrationDate: 2000-01-23
+          source: source
+          type: type
+          descriptions:
+          - description: description
+            languageCode: languageCode
+          - description: description
+            languageCode: languageCode
+          version: 1
+        names:
+        - endDate: 2000-01-23
+          name: name
+          registrationDate: 2000-01-23
+          source: source
+          type: type
+          version: 6
+        - endDate: 2000-01-23
+          name: name
+          registrationDate: 2000-01-23
+          source: source
+          type: type
+          version: 6
+        registrationDate: 2000-01-23
+        lastModified: 2000-01-23T04:56:07.000+00:00
+        mainBusinessLine:
+          typeCodeSet: typeCodeSet
+          registrationDate: 2000-01-23
+          source: source
+          type: type
+          descriptions:
+          - description: description
+            languageCode: languageCode
+          - description: description
+            languageCode: languageCode
+        tradeRegisterStatus: tradeRegisterStatus
+        status: status
+      properties:
+        businessId:
+          $ref: '#/components/schemas/Company_businessId'
+        euId:
+          $ref: '#/components/schemas/Company_euId'
+        names:
+          description: "Yrityksen nimet; päätoiminimi, rinnakkaistoiminimet ja aputoiminimet"
+          items:
+            $ref: '#/components/schemas/RegisterName'
+          minItems: 0
+          type: array
+        mainBusinessLine:
+          $ref: '#/components/schemas/Company_mainBusinessLine'
+        website:
+          $ref: '#/components/schemas/Company_website'
+        companyForms:
+          description: "Yritysmuoto ja edellinen tieto, jos se on olemassa"
+          items:
+            $ref: '#/components/schemas/CompanyForm'
+          maxItems: 2
+          minItems: 0
+          type: array
+        companySituations:
+          description: "Yrityksen tilanne (mahdollinen saneeraus, selvitystila tai\
+            \ konkurssi)"
+          items:
+            $ref: '#/components/schemas/CompanySituation'
+          minItems: 0
+          type: array
+        registeredEntries:
+          description: Yrityksen rekisterimerkinnät
+          items:
+            $ref: '#/components/schemas/RegisteredEntry'
+          minItems: 0
+          type: array
+        addresses:
+          description: Yrityksen käynti- tai postiosoite
+          items:
+            $ref: '#/components/schemas/Address'
+          maxItems: 2
+          minItems: 0
+          type: array
+        tradeRegisterStatus:
+          description: |
+            [Yrityksen kaupparekisterin tilatieto](/opendata-ytj-api/v3/description?code=REK_KDI&lang=fi)
+          type: string
+        status:
+          description: |
+            [Yrityksen y-tunnuksen tila](/opendata-ytj-api/v3/description?code=STATUS3&lang=fi)
+          type: string
+        registrationDate:
+          description: Yrityksen rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        endDate:
+          description: Lakkaamispäivä  muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        lastModified:
+          description: Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa
+            'vvvv-kk-pp 00:00:00'
+          format: date-time
+          maxLength: 19
+          minLength: 19
+          type: string
+          x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonFormat(shape\
+            \ = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern\
+            \ = \"yyyy-MM-dd HH:mm:ss\")"
+      required:
+      - businessId
+      - lastModified
+      - registeredEntries
+      - tradeRegisterStatus
+      type: object
+    Address:
+      description: Osoitetiedot
+      example:
+        country: country
+        postOffices:
+        - city: city
+          languageCode: languageCode
+          municipalityCode: municipalityCode
+        - city: city
+          languageCode: languageCode
+          municipalityCode: municipalityCode
+        source: source
+        type: 5
+        co: co
+        postOfficeBox: postOfficeBox
+        apartmentIdSuffix: apartmentIdSuffix
+        street: street
+        registrationDate: 2000-01-23
+        buildingNumber: buildingNumber
+        postCode: postCode
+        freeAddressLine: freeAddressLine
+        entrance: entrance
+        apartmentNumber: apartmentNumber
+      properties:
+        type:
+          description: "Osoitteen laji, käyntiosoite: 1, postiosoite: 2. "
+          format: int32
+          type: integer
+        street:
+          description: Katuosoite
+          maxLength: 50
+          minLength: 0
+          nullable: true
+          type: string
+        postCode:
+          description: Postinumero
+          maxLength: 5
+          minLength: 0
+          nullable: true
+          type: string
+        postOffices:
+          description: Postitoimipaikka eri kielillä
+          items:
+            $ref: '#/components/schemas/PostOffice'
+          minItems: 0
+          type: array
+        postOfficeBox:
+          description: Postilokero
+          maxLength: 5
+          minLength: 0
+          nullable: true
+          type: string
+        buildingNumber:
+          description: Talo
+          maxLength: 13
+          minLength: 0
+          nullable: true
+          type: string
+        entrance:
+          description: Porras
+          maxLength: 13
+          minLength: 0
+          nullable: true
+          type: string
+        apartmentNumber:
+          description: Huoneisto
+          maxLength: 4
+          minLength: 0
+          nullable: true
+          type: string
+        apartmentIdSuffix:
+          description: Jakokirjain
+          maxLength: 1
+          minLength: 0
+          nullable: true
+          type: string
+        co:
+          description: Osoitteen c/o-tieto
+          maxLength: 34
+          minLength: 0
+          nullable: true
+          type: string
+        country:
+          description: Kaksikirjaiminen maakoodi
+          maxLength: 2
+          minLength: 0
+          nullable: true
+          type: string
+        freeAddressLine:
+          description: "Vapaamuotoinen osoite esim. ulkomaalaiselle osoitteelle. Rivinvaihdot\
+            \ korvattu välilyönnillä, välilyönnit korvattu alaviivalla esim Norgå\
+            rdsvägen_3 _ SE-451_75 Uddevalla"
+          maxLength: 1000
+          minLength: 0
+          nullable: true
+          type: string
+        registrationDate:
+          description: Rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - type
+      type: object
+    RegisterName:
+      description: Nimitiedot
+      example:
+        endDate: 2000-01-23
+        name: name
+        registrationDate: 2000-01-23
+        source: source
+        type: type
+        version: 6
+      properties:
+        name:
+          description: Toiminimi
+          maxLength: 1000
+          minLength: 0
+          type: string
+        type:
+          description: |
+            [Nimen tyyppi](/opendata-ytj-api/v3/description?code=TLAJI&lang=fi)
+          maxLength: 8
+          minLength: 1
+          type: string
+        registrationDate:
+          description: Rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        endDate:
+          description: Rekisteröinnin loppupäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        version:
+          description: "Versio, 1 nykyinen versio, muut numerot aiempia versioita"
+          format: int32
+          type: integer
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - name
+      - source
+      - type
+      - version
+      type: object
+    CompanyForm:
+      description: Yritysmuoto
+      example:
+        endDate: 2000-01-23
+        registrationDate: 2000-01-23
+        source: source
+        type: type
+        descriptions:
+        - description: description
+          languageCode: languageCode
+        - description: description
+          languageCode: languageCode
+        version: 1
+      properties:
+        type:
+          description: |
+            [Yritysmuodon koodi](/opendata-ytj-api/v3/description?code=YRMU&lang=fi)
+          maxLength: 8
+          minLength: 1
+          type: string
+        descriptions:
+          description: Yritysmuodon kuvaukset
+          items:
+            $ref: '#/components/schemas/DescriptionEntry'
+          minItems: 0
+          type: array
+        registrationDate:
+          description: Rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        endDate:
+          description: Rekisteröinnin loppupäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        version:
+          description: "Versio, 1 nykyinen versio, muut numerot aiempia versioita"
+          format: int32
+          type: integer
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - type
+      - version
+      type: object
+    CompanySituation:
+      description: "Yrityksen tilanne (mahdollinen saneeraus, selvitystila tai konkurssi)"
+      example:
+        endDate: 2000-01-23
+        registrationDate: 2000-01-23
+        source: source
+        type: SANE
+      properties:
+        type:
+          description: |
+            [Yrityksen tilanteen koodi](/opendata-ytj-api/v3/description?code=SELTILA,SANE,KONK&lang=fi)
+          enum:
+          - SANE
+          - SELTILA
+          - KONK
+          type: string
+        registrationDate:
+          description: Rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        endDate:
+          description: Rekisteröinnin loppupäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - type
+      type: object
+    RegisteredEntry:
+      description: Rekisterimerkinnät
+      example:
+        endDate: 2000-01-23
+        authority: authority
+        registrationDate: 2000-01-23
+        type: type
+        descriptions:
+        - description: description
+          languageCode: languageCode
+        - description: description
+          languageCode: languageCode
+        register: register
+      properties:
+        type:
+          description: |
+            [Yrityksen rekisteröintitilan koodi](/opendata-ytj-api/v3/description?code=REK_KDI&lang=fi). Tulkittava Koodistosta REK_KDI yhdistämällä rekisterimerkinnän koodi rekisterikoodiin erotettuna alaviivalla, esim '1_0' on rekisteröimätön kaupparekisterissä
+          maxLength: 8
+          minLength: 1
+          type: string
+        descriptions:
+          description: Rekisteröintitilan kuvaukset
+          items:
+            $ref: '#/components/schemas/DescriptionEntry'
+          minItems: 0
+          type: array
+        registrationDate:
+          description: Rekisteröintipäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        endDate:
+          description: Rekisteröinnin loppupäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        register:
+          description: |
+            [Rekisterin koodi](/opendata-ytj-api/v3/description?code=REK&lang=fi)
+          maxLength: 8
+          minLength: 1
+          type: string
+        authority:
+          description: |
+            [Viranomaisen koodi](/opendata-ytj-api/v3/description?code=VIRANOM&lang=fi)
+          maxLength: 8
+          minLength: 1
+          type: string
+      required:
+      - authority
+      - register
+      - type
+      type: object
+    Source:
+      description: |
+        <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+      type: string
+    DescriptionEntry:
+      description: Tiedon kuvaus
+      example:
+        description: description
+        languageCode: languageCode
+      properties:
+        languageCode:
+          description: "Kielikoodi, 1 - Suomi, 2 - Ruotsi, 3 - Englanti"
+          maxLength: 2
+          type: string
+        description:
+          description: Koodiseloste
+          maxLength: 255
+          nullable: true
+          type: string
+      required:
+      - languageCode
+      type: object
+    PostOffice:
+      description: Postiosoitteet
+      example:
+        city: city
+        languageCode: languageCode
+        municipalityCode: municipalityCode
+      properties:
+        city:
+          description: Postitoimipaikka
+          maxLength: 50
+          type: string
+        languageCode:
+          description: |
+            [Kielikoodi](/opendata-ytj-api/v3/description?code=KIELI&lang=fi)
+          maxLength: 8
+          type: string
+        municipalityCode:
+          description: Kuntakoodi
+          maxLength: 3
+          minLength: 3
+          nullable: true
+          type: string
+      required:
+      - city
+      - languageCode
+      type: object
+    PostOfficeEntry:
+      description: Postiosoitteet
+      example:
+        city: city
+        active: true
+        postCode: postCode
+        languageCode: languageCode
+        municipalityCode: municipalityCode
+      properties:
+        postCode:
+          description: Postinumero
+          maxLength: 5
+          minLength: 5
+          type: string
+        city:
+          description: Postitoimipaikka
+          maxLength: 50
+          type: string
+        active:
+          description: Onko tieto aktiivinen
+          type: boolean
+        languageCode:
+          description: |
+            [Kielikoodi](/opendata-ytj-api/v3/description?code=KIELI&lang=fi)
+          maxLength: 8
+          type: string
+        municipalityCode:
+          description: Kuntakoodi
+          maxLength: 3
+          minLength: 3
+          nullable: true
+          type: string
+      required:
+      - active
+      - city
+      - languageCode
+      - postCode
+      type: object
+    ErrorResponse:
+      description: Virheilmoitus
+      example:
+        message: message
+        errorcode: 5
+        timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        timestamp:
+          description: Aika sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp
+            00:00:00'
+          format: date-time
+          maxLength: 19
+          minLength: 19
+          type: string
+          x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonFormat(shape\
+            \ = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern\
+            \ = \"yyyy-MM-dd HH:mm:ss\")"
+        message:
+          description: Virheviesti
+          maxLength: 1000
+          type: string
+        errorcode:
+          description: Virheen koodi
+          format: int32
+          type: integer
+      required:
+      - code
+      - timestamp
+      type: object
+    Company_businessId:
+      description: "Y-tunnus, esim 0116297-6"
+      example:
+        registrationDate: 2000-01-23
+        source: source
+        value: value
+      properties:
+        value:
+          description: Y-tunnus
+          maxLength: 9
+          minLength: 9
+          type: string
+        registrationDate:
+          description: Y-tunnuksen antamispäivä
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - value
+      type: object
+    Company_euId:
+      description: "EUID-tunnus, esim FIFPRO.0116297-6"
+      example:
+        source: source
+        value: value
+      properties:
+        value:
+          description: EUID tunnus
+          maxLength: 16
+          minLength: 16
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - value
+      type: object
+    Company_mainBusinessLine:
+      description: Päätoimiala
+      example:
+        typeCodeSet: typeCodeSet
+        registrationDate: 2000-01-23
+        source: source
+        type: type
+        descriptions:
+        - description: description
+          languageCode: languageCode
+        - description: description
+          languageCode: languageCode
+      properties:
+        type:
+          description: Toimialakoodi
+          maxLength: 5
+          minLength: 2
+          type: string
+        descriptions:
+          description: Toimialan kuvaukset
+          items:
+            $ref: '#/components/schemas/DescriptionEntry'
+          minItems: 0
+          type: array
+        typeCodeSet:
+          description: "Toimialaluokituksen koodistot TOIMI, TOIMI2, TOIMI3"
+          maxLength: 6
+          minLength: 5
+          type: string
+        registrationDate:
+          description: Toimialakoodin alkupäivämäärä muodossa vvvv-kk-pp
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - type
+      type: object
+    Company_website:
+      description: Yrityksen verkkosivut
+      example:
+        registrationDate: 2000-01-23
+        source: source
+        url: url
+      properties:
+        url:
+          description: Verkkosivut
+          maxLength: 255
+          minLength: 0
+          type: string
+        registrationDate:
+          format: date
+          maxLength: 10
+          minLength: 10
+          nullable: true
+          type: string
+        source:
+          description: |
+            <a aria-label="Tietolähde, avautuu uudessa ikkunassa" rel="noopener" href="/opendata-ytj-api/v3/description?code=TLAHDE&lang=fi">Tietolähde <svg width="15" height="14" viewBox="0 -9 24 24"> <path margin="0" fill="#035ca7" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"></path></svg></a>
+          type: string
+      required:
+      - source
+      - url
+      type: object
