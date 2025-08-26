@@ -1,5 +1,4 @@
-module github.com/tomidotomicode/goytj/v3
+module github.com/tomidotomicode/goytj
 
 go 1.18
 
-retract v3.0.1 // wrong module path; do not use
