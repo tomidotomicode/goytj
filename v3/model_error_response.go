@@ -12,6 +12,7 @@ package ytjclient
 
 import (
 	"encoding/json"
+	"time"
 	"bytes"
 	"fmt"
 )
@@ -22,7 +23,7 @@ var _ MappedNullable = &ErrorResponse{}
 // ErrorResponse Virheilmoitus
 type ErrorResponse struct {
 	// Aika sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp 00:00:00'
-	Timestamp string `json:"timestamp"`
+	Timestamp time.Time `json:"timestamp"`
 	// Virheviesti
 	Message *string `json:"message,omitempty"`
 	// Virheen koodi
@@ -35,7 +36,7 @@ type _ErrorResponse ErrorResponse
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewErrorResponse(timestamp string) *ErrorResponse {
+func NewErrorResponse(timestamp time.Time) *ErrorResponse {
 	this := ErrorResponse{}
 	this.Timestamp = timestamp
 	return &this
@@ -50,9 +51,9 @@ func NewErrorResponseWithDefaults() *ErrorResponse {
 }
 
 // GetTimestamp returns the Timestamp field value
-func (o *ErrorResponse) GetTimestamp() string {
+func (o *ErrorResponse) GetTimestamp() time.Time {
 	if o == nil {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 
@@ -61,7 +62,7 @@ func (o *ErrorResponse) GetTimestamp() string {
 
 // GetTimestampOk returns a tuple with the Timestamp field value
 // and a boolean to check if the value has been set.
-func (o *ErrorResponse) GetTimestampOk() (*string, bool) {
+func (o *ErrorResponse) GetTimestampOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -69,7 +70,7 @@ func (o *ErrorResponse) GetTimestampOk() (*string, bool) {
 }
 
 // SetTimestamp sets field value
-func (o *ErrorResponse) SetTimestamp(v string) {
+func (o *ErrorResponse) SetTimestamp(v time.Time) {
 	o.Timestamp = v
 }
 

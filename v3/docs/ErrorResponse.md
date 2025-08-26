@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timestamp** | **string** | Aika sekuntitasolla ilman aikavyöhykettä muodossa &#39;vvvv-kk-pp 00:00:00&#39; | 
+**Timestamp** | **time.Time** | Aika sekuntitasolla ilman aikavyöhykettä muodossa &#39;vvvv-kk-pp 00:00:00&#39; | 
 **Message** | Pointer to **string** | Virheviesti | [optional] 
 **Errorcode** | Pointer to **int32** | Virheen koodi | [optional] 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewErrorResponse
 
-`func NewErrorResponse(timestamp string, ) *ErrorResponse`
+`func NewErrorResponse(timestamp time.Time, ) *ErrorResponse`
 
 NewErrorResponse instantiates a new ErrorResponse object
 This constructor will assign default values to properties that have it defined,
@@ -29,20 +29,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetTimestamp
 
-`func (o *ErrorResponse) GetTimestamp() string`
+`func (o *ErrorResponse) GetTimestamp() time.Time`
 
 GetTimestamp returns the Timestamp field if non-nil, zero value otherwise.
 
 ### GetTimestampOk
 
-`func (o *ErrorResponse) GetTimestampOk() (*string, bool)`
+`func (o *ErrorResponse) GetTimestampOk() (*time.Time, bool)`
 
 GetTimestampOk returns a tuple with the Timestamp field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTimestamp
 
-`func (o *ErrorResponse) SetTimestamp(v string)`
+`func (o *ErrorResponse) SetTimestamp(v time.Time)`
 
 SetTimestamp sets Timestamp field to given value.
 
