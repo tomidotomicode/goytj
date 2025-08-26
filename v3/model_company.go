@@ -12,7 +12,6 @@ package ytjclient
 
 import (
 	"encoding/json"
-	"time"
 	"bytes"
 	"fmt"
 )
@@ -45,7 +44,7 @@ type Company struct {
 	// Lakkaamispäivä  muodossa vvvv-kk-pp
 	EndDate NullableString `json:"endDate,omitempty"`
 	// Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp 00:00:00'
-	LastModified time.Time `json:"lastModified"`
+	LastModified string `json:"lastModified"`
 }
 
 type _Company Company
@@ -54,7 +53,7 @@ type _Company Company
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCompany(businessId CompanyBusinessId, registeredEntries []RegisteredEntry, tradeRegisterStatus string, lastModified time.Time) *Company {
+func NewCompany(businessId CompanyBusinessId, registeredEntries []RegisteredEntry, tradeRegisterStatus string, lastModified string) *Company {
 	this := Company{}
 	this.BusinessId = businessId
 	this.RegisteredEntries = registeredEntries
@@ -484,9 +483,9 @@ func (o *Company) UnsetEndDate() {
 }
 
 // GetLastModified returns the LastModified field value
-func (o *Company) GetLastModified() time.Time {
+func (o *Company) GetLastModified() string {
 	if o == nil {
-		var ret time.Time
+		var ret string
 		return ret
 	}
 
@@ -495,7 +494,7 @@ func (o *Company) GetLastModified() time.Time {
 
 // GetLastModifiedOk returns a tuple with the LastModified field value
 // and a boolean to check if the value has been set.
-func (o *Company) GetLastModifiedOk() (*time.Time, bool) {
+func (o *Company) GetLastModifiedOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -503,7 +502,7 @@ func (o *Company) GetLastModifiedOk() (*time.Time, bool) {
 }
 
 // SetLastModified sets field value
-func (o *Company) SetLastModified(v time.Time) {
+func (o *Company) SetLastModified(v string) {
 	o.LastModified = v
 }
 
