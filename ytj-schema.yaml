@@ -406,7 +406,6 @@ components:
           type: string
           minLength: 19
           maxLength: 19
-          format: date-time
           x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\")"
           description: "Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp 00:00:00'"
     Address:
@@ -710,7 +709,6 @@ components:
           type: string
           minLength: 19
           maxLength: 19
-          format: date-time
           x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\")"
           description: "Aika sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp 00:00:00'"
         message:

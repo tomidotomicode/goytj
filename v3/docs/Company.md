@@ -17,13 +17,13 @@ Name | Type | Description | Notes
 **Status** | Pointer to **string** | [Yrityksen y-tunnuksen tila](/opendata-ytj-api/v3/description?code&#x3D;STATUS3&amp;lang&#x3D;fi)  | [optional] 
 **RegistrationDate** | Pointer to **NullableString** | Yrityksen rekisteröintipäivämäärä muodossa vvvv-kk-pp | [optional] 
 **EndDate** | Pointer to **NullableString** | Lakkaamispäivä  muodossa vvvv-kk-pp | [optional] 
-**LastModified** | **time.Time** | Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa &#39;vvvv-kk-pp 00:00:00&#39; | 
+**LastModified** | **string** | Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa &#39;vvvv-kk-pp 00:00:00&#39; | 
 
 ## Methods
 
 ### NewCompany
 
-`func NewCompany(businessId CompanyBusinessId, registeredEntries []RegisteredEntry, tradeRegisterStatus string, lastModified time.Time, ) *Company`
+`func NewCompany(businessId CompanyBusinessId, registeredEntries []RegisteredEntry, tradeRegisterStatus string, lastModified string, ) *Company`
 
 NewCompany instantiates a new Company object
 This constructor will assign default values to properties that have it defined,
@@ -370,20 +370,20 @@ HasEndDate returns a boolean if a field has been set.
 UnsetEndDate ensures that no value is present for EndDate, not even an explicit nil
 ### GetLastModified
 
-`func (o *Company) GetLastModified() time.Time`
+`func (o *Company) GetLastModified() string`
 
 GetLastModified returns the LastModified field if non-nil, zero value otherwise.
 
 ### GetLastModifiedOk
 
-`func (o *Company) GetLastModifiedOk() (*time.Time, bool)`
+`func (o *Company) GetLastModifiedOk() (*string, bool)`
 
 GetLastModifiedOk returns a tuple with the LastModified field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLastModified
 
-`func (o *Company) SetLastModified(v time.Time)`
+`func (o *Company) SetLastModified(v string)`
 
 SetLastModified sets LastModified field to given value.
 

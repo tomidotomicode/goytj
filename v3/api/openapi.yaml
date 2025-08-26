@@ -472,7 +472,7 @@ components:
             type: type
             version: 6
           registrationDate: 2000-01-23
-          lastModified: 2000-01-23T04:56:07.000+00:00
+          lastModified: lastModified
           mainBusinessLine:
             typeCodeSet: typeCodeSet
             registrationDate: 2000-01-23
@@ -603,7 +603,7 @@ components:
             type: type
             version: 6
           registrationDate: 2000-01-23
-          lastModified: 2000-01-23T04:56:07.000+00:00
+          lastModified: lastModified
           mainBusinessLine:
             typeCodeSet: typeCodeSet
             registrationDate: 2000-01-23
@@ -751,7 +751,7 @@ components:
           type: type
           version: 6
         registrationDate: 2000-01-23
-        lastModified: 2000-01-23T04:56:07.000+00:00
+        lastModified: lastModified
         mainBusinessLine:
           typeCodeSet: typeCodeSet
           registrationDate: 2000-01-23
@@ -831,7 +831,6 @@ components:
         lastModified:
           description: Viimeksi muokattu sekuntitasolla ilman aikavyöhykettä muodossa
             'vvvv-kk-pp 00:00:00'
-          format: date-time
           maxLength: 19
           minLength: 19
           type: string
@@ -1243,12 +1242,11 @@ components:
       example:
         message: message
         errorcode: 5
-        timestamp: 2000-01-23T04:56:07.000+00:00
+        timestamp: timestamp
       properties:
         timestamp:
           description: Aika sekuntitasolla ilman aikavyöhykettä muodossa 'vvvv-kk-pp
             00:00:00'
-          format: date-time
           maxLength: 19
           minLength: 19
           type: string
